@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: prenatal-ai-screening
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python -m ml.inspect_data && python -m ml.train
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_PATH
+        value: data/screening_history.sqlite3
+      - key: MODEL_DIR
+        value: models
+      - key: REPORT_DIR
+        value: reports
+      - key: RAW_DATA_DIR
+        value: data/raw
+      - key: T21_LOW_THRESHOLD
+        value: "0.15"
+      - key: T21_HIGH_THRESHOLD
+        value: "0.35"
+      - key: T18_LOW_THRESHOLD
+        value: "0.10"
+      - key: T18_HIGH_THRESHOLD
+        value: "0.30"
