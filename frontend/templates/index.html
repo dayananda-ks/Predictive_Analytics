@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero p-5 p-lg-6 mb-4 animate-fade-up">
+  <div class="row align-items-center g-4">
+    <div class="col-12 col-lg-8">
+      <span class="badge pill-prototype rounded-pill mb-3">Academic Research Prototype</span>
+      <h1 class="display-5 fw-bold page-heading">Predictive Analytics for Prenatal Screening of Trisomy 21 and Trisomy 18 using AI &amp; ML</h1>
+      <p class="lead mt-3 mb-4">
+        An AI/ML research prototype for estimating prenatal screening risk for Trisomy 21 and Trisomy 18 using maternal, ultrasound and biochemical screening parameters.
+      </p>
+      <div class="d-flex flex-wrap gap-3">
+        <a class="btn btn-light btn-lg" href="/screening">Start Screening</a>
+        <a class="btn btn-outline-light btn-lg" href="/model-performance">Model Performance</a>
+        <a class="btn btn-outline-warning btn-lg" href="/about">About Project</a>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="glass-card p-4">
+        <h2 class="h5">Important disclaimer</h2>
+        <p class="mb-0">{{ disclaimer }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row g-4">
+  <div class="col-12 col-lg-4">
+    <div class="section-card p-4 h-100">
+      <h3 class="section-title">Screening inputs</h3>
+      <p class="mb-0">Maternal, ultrasound, biochemical, and background features are handled through a validated preprocessing pipeline.</p>
+    </div>
+  </div>
+  <div class="col-12 col-lg-4">
+    <div class="section-card p-4 h-100">
+      <h3 class="section-title">Modeling</h3>
+      <p class="mb-0">Separate binary classifiers are trained for T21 and T18 using Logistic Regression, Random Forest, SVM, and XGBoost.</p>
+    </div>
+  </div>
+  <div class="col-12 col-lg-4">
+    <div class="section-card p-4 h-100">
+      <h3 class="section-title">Research output</h3>
+      <p class="mb-0">Actual metrics, charts, explainability summaries, and PDF reporting are generated from the trained synthetic dataset.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

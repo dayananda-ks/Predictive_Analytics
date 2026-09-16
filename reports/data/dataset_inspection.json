@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-09-16T13:39:41.949063Z",
+  "datasets": [
+    {
+      "filename": "prenatal_screening_synthetic_dataset.csv",
+      "rows": 5000,
+      "columns": 14,
+      "column_names": [
+        "patient_id",
+        "maternal_age",
+        "gestational_age_weeks",
+        "nuchal_translucency_mm",
+        "crown_rump_length_mm",
+        "nasal_bone_present",
+        "papp_a_mom",
+        "free_bhcg_mom",
+        "fetal_fraction_pct",
+        "maternal_bmi",
+        "prior_aneuploidy_pregnancy",
+        "ivf_conception",
+        "smoking_status",
+        "outcome"
+      ],
+      "dtypes": {
+        "patient_id": "str",
+        "maternal_age": "float64",
+        "gestational_age_weeks": "float64",
+        "nuchal_translucency_mm": "float64",
+        "crown_rump_length_mm": "float64",
+        "nasal_bone_present": "float64",
+        "papp_a_mom": "float64",
+        "free_bhcg_mom": "float64",
+        "fetal_fraction_pct": "float64",
+        "maternal_bmi": "float64",
+        "prior_aneuploidy_pregnancy": "int64",
+        "ivf_conception": "int64",
+        "smoking_status": "int64",
+        "outcome": "str"
+      },
+      "missing_values": {
+        "patient_id": 0,
+        "maternal_age": 0,
+        "gestational_age_weeks": 0,
+        "nuchal_translucency_mm": 156,
+        "crown_rump_length_mm": 0,
+        "nasal_bone_present": 149,
+        "papp_a_mom": 0,
+        "free_bhcg_mom": 0,
+        "fetal_fraction_pct": 143,
+        "maternal_bmi": 152,
+        "prior_aneuploidy_pregnancy": 0,
+        "ivf_conception": 0,
+        "smoking_status": 0,
+        "outcome": 0
+      },
+      "duplicate_rows": 0,
+      "class_distribution": {
+        "Unaffected": 4825,
+        "Trisomy21": 130,
+        "Trisomy18": 45
+      },
+      "target_candidates": [
+        "outcome"
+      ],
+      "source": "unknown",
+      "license": "unknown",
+      "citation": "unknown",
+      "synthetic": true,
+      "compatible_for_primary_model": true,
+      "notes": "Synthetic dataset detected from local workspace."
+    }
+  ],
+  "primary_dataset": "prenatal_screening_synthetic_dataset.csv"
+}

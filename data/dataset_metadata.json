@@ -1,0 +1,13 @@
+{
+  "datasets": [
+    {
+      "filename": "prenatal_screening_synthetic_dataset.csv",
+      "source": "unknown",
+      "license": "unknown",
+      "citation": "unknown",
+      "synthetic": true
+    }
+  ],
+  "synthetic_data": true,
+  "notes": "Synthetic research prototype dataset. Not real patient data."
+}

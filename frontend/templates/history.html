@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-card p-4 p-lg-5 animate-fade-up">
+  <div class="mb-4">
+    <h1 class="h2 page-heading mb-1">Screening History</h1>
+    <p class="mb-0">Stored history contains only the screening inputs and model-estimated outputs required for audit and review.</p>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>T21 Risk</th>
+          <th>T21 Category</th>
+          <th>T18 Risk</th>
+          <th>T18 Category</th>
+          <th>Model</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="history-table-body"></tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
