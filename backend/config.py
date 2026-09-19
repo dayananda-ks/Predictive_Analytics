@@ -25,7 +25,7 @@ class Config:
     T21_HIGH_THRESHOLD: float = float(os.getenv("T21_HIGH_THRESHOLD", "0.35"))
     T18_LOW_THRESHOLD: float = float(os.getenv("T18_LOW_THRESHOLD", "0.10"))
     T18_HIGH_THRESHOLD: float = float(os.getenv("T18_HIGH_THRESHOLD", "0.30"))
-    TITLE: str = "Predictive Analytics for Prenatal Screening of Trisomy 21 and Trisomy 18 using AI & ML"
+    TITLE: str = "Prenatal AI Screening"
     DISCLAIMER: str = (
         "This application is an academic research prototype for prenatal screening risk estimation. "
         "It is not a medical diagnostic tool and must not be used independently for clinical decision-making. "

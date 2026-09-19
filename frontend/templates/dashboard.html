@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="dashboard-shell animate-fade-up">
+  <div class="hero hero-dashboard p-4 p-lg-5 mb-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-4 align-items-start align-items-lg-center">
+      <div>
+        <span class="badge pill-prototype rounded-pill mb-3">Workspace</span>
+        <h1 class="display-6 fw-semibold mb-2">Welcome back, {{ current_user.name }}</h1>
+        <p class="mb-0">Everything you need for screening, history, and your profile in one clean view.</p>
+      </div>
+      <a class="btn btn-light btn-lg" href="/screening">Start Screening</a>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4" id="dashboard-metrics">
+    <div class="col-6 col-lg-3">
+      <div class="metric-card metric-card-hero p-4 h-100">
+        <div class="small-muted text-uppercase">Total screenings</div>
+        <div class="display-6 fw-semibold mb-0" id="total-screenings">-</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="metric-card metric-card-hero p-4 h-100">
+        <div class="small-muted text-uppercase">Latest screening</div>
+        <div class="h4 mb-0" id="latest-screening">-</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="metric-card metric-card-hero p-4 h-100">
+        <div class="small-muted text-uppercase">Latest T21 risk</div>
+        <div class="h4 mb-0" id="latest-t21">-</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="metric-card metric-card-hero p-4 h-100">
+        <div class="small-muted text-uppercase">Latest T18 risk</div>
+        <div class="h4 mb-0" id="latest-t18">-</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-4">
+      <div class="section-card p-4 h-100">
+        <h2 class="section-title mb-3">What you can do</h2>
+        <div class="dashboard-step mb-3">
+          <div class="step-number">1</div>
+          <div>
+            <div class="fw-semibold">Run a screening</div>
+            <div class="small-muted">Enter the required fields and get a clear result.</div>
+          </div>
+        </div>
+        <div class="dashboard-step mb-3">
+          <div class="step-number">2</div>
+          <div>
+            <div class="fw-semibold">Review history</div>
+            <div class="small-muted">Your past results stay attached to your profile.</div>
+          </div>
+        </div>
+        <div class="dashboard-step">
+          <div class="step-number">3</div>
+          <div>
+            <div class="fw-semibold">Update profile</div>
+            <div class="small-muted">Change your name or sign out from one place.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-8">
+      <div class="section-card p-4 h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h2 class="section-title mb-1">Recent screenings</h2>
+            <p class="small-muted mb-0">Your latest results are saved automatically.</p>
+          </div>
+          <a class="btn btn-outline-primary btn-sm" href="/history">Open history</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-borderless align-middle history-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>T21</th>
+                <th>T18</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="dashboard-history"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-shell animate-fade-up">
+  <div class="auth-intro hero p-4 p-lg-5">
+    <span class="badge pill-prototype rounded-pill mb-3">Prenatal AI Screening</span>
+    <h1 class="display-5 fw-semibold mb-3">Sign in and continue.</h1>
+    <p class="mb-4">Use one account to save screenings, review history, and return whenever you need it.</p>
+    <div class="auth-meta d-flex flex-wrap gap-2">
+      <span class="meta-chip">Saved history</span>
+      <span class="meta-chip">Fast screening</span>
+      <span class="meta-chip">User profile</span>
+    </div>
+  </div>
+  <div class="auth-card-wrap">
+    <div class="section-card p-4 p-lg-5 h-100">
+      <h2 class="section-title mb-4">Sign In</h2>
+      {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+      {% endif %}
+      <form method="post" action="/login" class="auth-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input class="form-control form-control-lg" type="email" name="email" autocomplete="email" required />
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Password</label>
+          <input class="form-control form-control-lg" type="password" name="password" autocomplete="current-password" required />
+        </div>
+        <div class="d-grid gap-3">
+          <button class="btn btn-primary btn-lg">Sign In</button>
+          <a class="btn btn-outline-primary" href="/signup">Create account</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

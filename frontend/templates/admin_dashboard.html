@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-card p-4 p-lg-5">
+  <h1 class="h3">Administration</h1>
+  <p class="mb-3">System and model status.</p>
+  <div class="row g-3">
+    <div class="col-6 col-md-3"><div class="card p-3">Total Users<br><strong id="total-users">-</strong></div></div>
+    <div class="col-6 col-md-3"><div class="card p-3">Active Users<br><strong id="active-users">-</strong></div></div>
+    <div class="col-6 col-md-3"><div class="card p-3">Total Screenings<br><strong id="total-screenings">-</strong></div></div>
+    <div class="col-6 col-md-3"><div class="card p-3">Screenings Today<br><strong id="screenings-today">-</strong></div></div>
+  </div>
+</div>
+{% endblock %}

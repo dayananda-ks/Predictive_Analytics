@@ -1,19 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="section-card p-4 p-lg-5 animate-fade-up">
-  <h1 class="h2 page-heading">About the Project</h1>
-  <p>
-    This final-year research prototype demonstrates an end-to-end workflow for prenatal screening risk estimation using a synthetic dataset.
-    The pipeline includes dataset inspection, preprocessing, model training, evaluation, explainability, PDF reporting, and a Flask web interface.
-  </p>
-  <p>
-    The application is intentionally framed as a screening risk estimation research tool. It does not diagnose fetal conditions and must not be used independently for clinical decision-making.
-  </p>
-  <ul>
-    <li>Python ML pipeline with scikit-learn and XGBoost</li>
-    <li>Flask backend with SQLite history storage</li>
-    <li>Bootstrap 5 and Chart.js frontend</li>
-    <li>ReportLab PDF report generation</li>
-  </ul>
-</div>
+<section class="section-card p-4 p-lg-5 animate-fade-up">
+  <span class="badge pill-prototype rounded-pill mb-2">About</span>
+  <h1 class="page-heading mb-3">A simple screening workspace</h1>
+  <p class="mb-3">Prenatal AI Screening gives you a focused place to log in, run a screening, view the result, and keep your history tied to your profile.</p>
+  <p class="mb-0">The app is designed to be quick to use, easy to return to, and clear about the estimated chances shown after submission.</p>
+</section>
 {% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-shell animate-fade-up">
+  <div class="auth-intro hero p-4 p-lg-5">
+    <span class="badge pill-prototype rounded-pill mb-3">Create your profile</span>
+    <h1 class="display-5 fw-semibold mb-3">Set up your account.</h1>
+    <p class="mb-4">Your screenings and history stay with your profile so you can log in again any time.</p>
+    <div class="auth-meta d-flex flex-wrap gap-2">
+      <span class="meta-chip">Private profile</span>
+      <span class="meta-chip">Saved history</span>
+      <span class="meta-chip">Quick access</span>
+    </div>
+  </div>
+  <div class="auth-card-wrap">
+    <div class="section-card p-4 p-lg-5 h-100">
+      <h2 class="section-title mb-4">Create Account</h2>
+      {% if errors %}
+        <div class="alert alert-danger">
+          <ul class="mb-0 ps-3">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+        </div>
+      {% endif %}
+      <form method="post" action="/signup" class="auth-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="mb-3">
+          <label class="form-label">Full name</label>
+          <input class="form-control form-control-lg" type="text" name="name" autocomplete="name" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input class="form-control form-control-lg" type="email" name="email" autocomplete="email" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input class="form-control form-control-lg" type="password" name="password" autocomplete="new-password" required />
+          <div class="form-text">Minimum 8 characters.</div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Confirm password</label>
+          <input class="form-control form-control-lg" type="password" name="confirm" autocomplete="new-password" required />
+        </div>
+        <div class="d-grid gap-3">
+          <button class="btn btn-primary btn-lg">Create Account</button>
+          <a class="btn btn-outline-primary" href="/login">Already have an account?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

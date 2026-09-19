@@ -5,7 +5,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from flask import Blueprint, Response, current_app, jsonify, render_template, request, send_file
+from flask import Blueprint, Response, current_app, flash, jsonify, render_template, request, send_file, redirect, url_for
+from flask_login import current_user, login_required
+
+from backend.auth import admin_required
 
 from backend.database import add_history_record, delete_history_record, list_history_records
 from backend.report_generator import build_pdf_report
@@ -30,16 +33,19 @@ def home() -> str:
 
 
 @bp.route("/screening")
+@login_required
 def screening() -> str:
     return render_template("screening.html", title=_config()["TITLE"], disclaimer=_config()["DISCLAIMER"])
 
 
 @bp.route("/results")
+@login_required
 def results() -> str:
     return render_template("results.html", title=_config()["TITLE"], disclaimer=_config()["DISCLAIMER"])
 
 
 @bp.route("/history")
+@login_required
 def history() -> str:
     return render_template("history.html", title=_config()["TITLE"], disclaimer=_config()["DISCLAIMER"])
 
@@ -112,6 +118,7 @@ def predict() -> Response:
     history_id = add_history_record(
         _config()["DATABASE_PATH"],
         {
+            "user_id": int(current_user.get_id()) if current_user.is_authenticated else None,
             "input_data": cleaned,
             "t21_probability": result["t21_probability"],
             "t21_risk_level": result["t21_risk_level"],
@@ -125,14 +132,58 @@ def predict() -> Response:
     return jsonify(result)
 
 
+@bp.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template("dashboard.html", title=_config()["TITLE"], disclaimer=_config()["DISCLAIMER"])
+
+
+@bp.route("/admin/dashboard")
+@admin_required
+def admin_dashboard():
+    return render_template("admin_dashboard.html", title=_config()["TITLE"], disclaimer=_config()["DISCLAIMER"])
+
+
+@bp.route("/profile", methods=["GET", "POST"])
+@login_required
+def profile():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        try:
+            from backend.database import update_user_name, get_user_by_id
+
+            db = _config()["DATABASE_PATH"]
+            user_row = get_user_by_id(db, int(current_user.get_id()))
+            if user_row and name:
+                update_user_name(db, int(current_user.get_id()), name)
+                flash("Profile updated.", "success")
+                return redirect(url_for("app.profile"))
+        except Exception:
+            pass
+    from backend.database import get_user_by_id
+
+    user_row = get_user_by_id(_config()["DATABASE_PATH"], int(current_user.get_id()))
+    return render_template(
+        "profile.html",
+        title=_config()["TITLE"],
+        disclaimer=_config()["DISCLAIMER"],
+        user_record=user_row,
+    )
+
+
 @bp.route("/api/history", methods=["GET", "POST"])
 def history_api() -> Response:
     database_path = _config()["DATABASE_PATH"]
     if request.method == "GET":
-        return jsonify({"records": list_history_records(database_path)})
+        history_user_id = None
+        if current_user.is_authenticated and not getattr(current_user, "is_admin", False):
+            history_user_id = int(current_user.get_id())
+        return jsonify({"records": list_history_records(database_path, history_user_id)})
 
     payload = request.get_json(silent=True) or {}
     try:
+        if current_user.is_authenticated and "user_id" not in payload:
+            payload["user_id"] = int(current_user.get_id())
         record_id = add_history_record(database_path, payload)
     except Exception as exc:
         return jsonify({"error": str(exc)}), 400
@@ -141,7 +192,10 @@ def history_api() -> Response:
 
 @bp.route("/api/history/<int:record_id>", methods=["DELETE"])
 def delete_history(record_id: int) -> Response:
-    deleted = delete_history_record(_config()["DATABASE_PATH"], record_id)
+    user_id = None
+    if current_user.is_authenticated and not getattr(current_user, "is_admin", False):
+        user_id = int(current_user.get_id())
+    deleted = delete_history_record(_config()["DATABASE_PATH"], record_id, user_id)
     if not deleted:
         return jsonify({"error": "Record not found."}), 404
     return jsonify({"status": "deleted", "id": record_id})

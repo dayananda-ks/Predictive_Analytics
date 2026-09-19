@@ -3,6 +3,23 @@ const state = {
   screeningResult: null,
 };
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function formatPercent(value) {
+  return `${Number(value).toFixed(2)}%`;
+}
+
+function formatDateTime(value) {
+  return new Date(value).toLocaleString();
+}
+
 function humanizeFeatureName(name) {
   const labels = {
     maternal_age: "Maternal Age",
@@ -27,6 +44,12 @@ function categoryClass(riskLabel) {
   if (lower.includes("high")) return "warning";
   if (lower.includes("moderate")) return "primary";
   return "success";
+}
+
+function resultTone(percentage) {
+  if (percentage >= 35) return "high";
+  if (percentage >= 15) return "medium";
+  return "low";
 }
 
 async function fetchModelInfo() {
@@ -76,7 +99,7 @@ function buildField(fieldName, spec) {
   }
 
   wrapper.innerHTML = `
-    <div class="mb-3">
+    <div class="field-card p-3 h-100">
       <label class="form-label fw-semibold" for="${fieldName}">${label}</label>
       ${control}
     </div>
@@ -113,7 +136,7 @@ async function renderScreeningForm() {
     const data = await response.json();
     if (!response.ok) {
       feedback.textContent = data.error || "Prediction failed.";
-      feedback.className = "alert alert-danger";
+      feedback.className = "alert alert-danger shadow-sm";
       return;
     }
 
@@ -135,34 +158,53 @@ function renderResultsPage() {
 
   const t21Class = categoryClass(result.t21_risk_level);
   const t18Class = categoryClass(result.t18_risk_level);
+  const t21Tone = resultTone(Number(result.t21_percentage));
+  const t18Tone = resultTone(Number(result.t18_percentage));
 
   container.innerHTML = `
     <div class="row g-4">
       <div class="col-12 col-lg-6">
-        <div class="section-card p-4 h-100 risk-box ${t21Class === "warning" ? "high" : ""}">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h4 mb-0">T21</h2>
-            <span class="badge rounded-pill bg-${t21Class}">Prototype ${result.t21_risk_level}</span>
+        <div class="result-card result-${t21Tone} p-4 h-100">
+          <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+              <div class="result-kicker">T21</div>
+              <h2 class="h3 mb-1">Trisomy 21</h2>
+              <p class="mb-0">Model-estimated chance</p>
+            </div>
+            <span class="badge rounded-pill bg-${t21Class}">${escapeHtml(result.t21_risk_level)}</span>
           </div>
-          <p class="text-uppercase text-muted small mb-1">Model-estimated screening risk</p>
-          <div class="display-5 fw-bold">${Number(result.t21_percentage).toFixed(2)}%</div>
-          <p class="mt-3 mb-0"><strong>Selected model:</strong> ${result.selected_models?.t21 || "unknown"}</p>
+          <div class="result-percent">${formatPercent(result.t21_percentage)}</div>
+          <div class="progress result-progress mb-3" role="progressbar" aria-valuenow="${Number(result.t21_percentage)}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-${t21Class}" style="width:${Math.min(Number(result.t21_percentage), 100)}%"></div>
+          </div>
+          <div class="result-meta">Selected model: ${escapeHtml(result.selected_models?.t21 || "unknown")}</div>
         </div>
       </div>
       <div class="col-12 col-lg-6">
-        <div class="section-card p-4 h-100 risk-box ${t18Class === "warning" ? "high" : ""}">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h4 mb-0">T18</h2>
-            <span class="badge rounded-pill bg-${t18Class}">Prototype ${result.t18_risk_level}</span>
+        <div class="result-card result-${t18Tone} p-4 h-100">
+          <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+              <div class="result-kicker">T18</div>
+              <h2 class="h3 mb-1">Trisomy 18</h2>
+              <p class="mb-0">Model-estimated chance</p>
+            </div>
+            <span class="badge rounded-pill bg-${t18Class}">${escapeHtml(result.t18_risk_level)}</span>
           </div>
-          <p class="text-uppercase text-muted small mb-1">Model-estimated screening risk</p>
-          <div class="display-5 fw-bold">${Number(result.t18_percentage).toFixed(2)}%</div>
-          <p class="mt-3 mb-0"><strong>Selected model:</strong> ${result.selected_models?.t18 || "unknown"}</p>
+          <div class="result-percent">${formatPercent(result.t18_percentage)}</div>
+          <div class="progress result-progress mb-3" role="progressbar" aria-valuenow="${Number(result.t18_percentage)}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-${t18Class}" style="width:${Math.min(Number(result.t18_percentage), 100)}%"></div>
+          </div>
+          <div class="result-meta">Selected model: ${escapeHtml(result.selected_models?.t18 || "unknown")}</div>
         </div>
       </div>
       <div class="col-12">
         <div class="section-card p-4">
-          <h3 class="section-title mb-3">Model feature contribution</h3>
+          <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-start align-items-lg-center mb-3">
+            <div>
+              <h3 class="section-title mb-1">Model feature contribution</h3>
+              <p class="small-muted mb-0">The strongest features that influenced the estimate.</p>
+            </div>
+          </div>
           <div class="row g-3" id="feature-contributions"></div>
         </div>
       </div>
@@ -190,7 +232,7 @@ function renderResultsPage() {
       .map(
         (item) => `
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>${item.feature}</span>
+            <span>${escapeHtml(item.feature)}</span>
             <span class="badge badge-soft rounded-pill">${Number(item.contribution).toFixed(4)}</span>
           </li>
         `
@@ -230,18 +272,22 @@ async function renderHistoryPage() {
   if (!container) return;
   const response = await fetch("/api/history");
   const data = await response.json();
-  const rows = (data.records || []).map((record) => `
+  const rows = (data.records || [])
+    .map(
+      (record) => `
     <tr>
-      <td>${new Date(record.timestamp).toLocaleString()}</td>
-      <td>${(Number(record.t21_probability) * 100).toFixed(2)}%</td>
-      <td><span class="badge bg-${categoryClass(record.t21_risk_level)}">${record.t21_risk_level}</span></td>
-      <td>${(Number(record.t18_probability) * 100).toFixed(2)}%</td>
-      <td><span class="badge bg-${categoryClass(record.t18_risk_level)}">${record.t18_risk_level}</span></td>
-      <td>${record.model_name}</td>
+      <td>${formatDateTime(record.timestamp)}</td>
+      <td>${formatPercent(Number(record.t21_probability) * 100)}</td>
+      <td><span class="badge rounded-pill bg-${categoryClass(record.t21_risk_level)}">${escapeHtml(record.t21_risk_level)}</span></td>
+      <td>${formatPercent(Number(record.t18_probability) * 100)}</td>
+      <td><span class="badge rounded-pill bg-${categoryClass(record.t18_risk_level)}">${escapeHtml(record.t18_risk_level)}</span></td>
+      <td class="small-muted">${escapeHtml(record.model_name)}</td>
       <td><button class="btn btn-sm btn-outline-danger" data-delete-id="${record.id}">Delete</button></td>
     </tr>
-  `).join("");
-  container.innerHTML = rows || '<tr><td colspan="7" class="text-center">No screening history yet.</td></tr>';
+  `
+    )
+    .join("");
+  container.innerHTML = rows || '<tr><td colspan="7" class="text-center py-4">No screening history yet.</td></tr>';
 
   container.querySelectorAll("button[data-delete-id]").forEach((button) => {
     button.addEventListener("click", async () => {
@@ -250,6 +296,35 @@ async function renderHistoryPage() {
       await renderHistoryPage();
     });
   });
+}
+
+async function renderDashboardPage() {
+  const historyBody = document.getElementById("dashboard-history");
+  if (!historyBody) return;
+  const response = await fetch("/api/history");
+  const data = await response.json();
+  const records = data.records || [];
+  document.getElementById("total-screenings").textContent = records.length.toString();
+  if (records.length > 0) {
+    const latest = records[0];
+    document.getElementById("latest-screening").textContent = formatDateTime(latest.timestamp);
+    document.getElementById("latest-t21").textContent = formatPercent(Number(latest.t21_probability) * 100);
+    document.getElementById("latest-t18").textContent = formatPercent(Number(latest.t18_probability) * 100);
+  } else {
+    document.getElementById("latest-screening").textContent = "No records";
+    document.getElementById("latest-t21").textContent = "-";
+    document.getElementById("latest-t18").textContent = "-";
+  }
+
+  const rows = records.slice(0, 5).map((record) => `
+    <tr>
+      <td>${formatDateTime(record.timestamp)}</td>
+      <td><span class="badge rounded-pill bg-${categoryClass(record.t21_risk_level)}">${formatPercent(Number(record.t21_probability) * 100)}</span></td>
+      <td><span class="badge rounded-pill bg-${categoryClass(record.t18_risk_level)}">${formatPercent(Number(record.t18_probability) * 100)}</span></td>
+      <td><a class="btn btn-sm btn-outline-primary" href="/history">View</a></td>
+    </tr>
+  `).join("");
+  historyBody.innerHTML = rows || '<tr><td colspan="4" class="text-center py-4">No screenings yet. Start your first one now.</td></tr>';
 }
 
 async function renderModelPerformancePage() {
@@ -366,6 +441,7 @@ async function initReportDownload() {
 document.addEventListener("DOMContentLoaded", () => {
   renderScreeningForm();
   renderResultsPage();
+  renderDashboardPage();
   renderHistoryPage();
   renderModelPerformancePage();
   initReportDownload();

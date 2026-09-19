@@ -1,23 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="hero p-5 p-lg-6 mb-4 animate-fade-up">
+<section class="hero hero-home p-4 p-lg-5 mb-4 animate-fade-up">
   <div class="row align-items-center g-4">
-    <div class="col-12 col-lg-8">
-      <span class="badge pill-prototype rounded-pill mb-3">Academic Research Prototype</span>
-      <h1 class="display-5 fw-bold page-heading">Predictive Analytics for Prenatal Screening of Trisomy 21 and Trisomy 18 using AI &amp; ML</h1>
-      <p class="lead mt-3 mb-4">
-        An AI/ML research prototype for estimating prenatal screening risk for Trisomy 21 and Trisomy 18 using maternal, ultrasound and biochemical screening parameters.
+    <div class="col-12 col-lg-6">
+      <span class="badge pill-prototype rounded-pill mb-3">Prenatal AI Screening</span>
+      <h1 class="display-4 fw-semibold page-heading mb-3">Simple screening, fast answers.</h1>
+      <p class="lead mb-4">
+        Sign in to save your history, run a screening, and review the model result in one place.
       </p>
       <div class="d-flex flex-wrap gap-3">
-        <a class="btn btn-light btn-lg" href="/screening">Start Screening</a>
-        <a class="btn btn-outline-light btn-lg" href="/model-performance">Model Performance</a>
-        <a class="btn btn-outline-warning btn-lg" href="/about">About Project</a>
+        <a class="btn btn-light btn-lg" href="/login">Sign In</a>
+        <a class="btn btn-outline-light btn-lg" href="/signup">Create Account</a>
       </div>
     </div>
-    <div class="col-12 col-lg-4">
-      <div class="glass-card p-4">
-        <h2 class="h5">Important disclaimer</h2>
-        <p class="mb-0">{{ disclaimer }}</p>
+    <div class="col-12 col-lg-6">
+      <div class="hero-panel p-4 p-lg-5">
+        <h2 class="section-title mb-2">Purpose</h2>
+        <p class="mb-4">A clean workspace for prenatal screening estimates and saved user history.</p>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <div class="mini-card h-100">
+              <div class="mini-label">Login</div>
+              <div class="mini-copy">Continue with your saved account and access past screenings.</div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="mini-card h-100">
+              <div class="mini-label">Sign up</div>
+              <div class="mini-copy">Create a new account and start storing your history.</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -26,20 +39,22 @@
 <section class="row g-4">
   <div class="col-12 col-lg-4">
     <div class="section-card p-4 h-100">
-      <h3 class="section-title">Screening inputs</h3>
-      <p class="mb-0">Maternal, ultrasound, biochemical, and background features are handled through a validated preprocessing pipeline.</p>
+      <h3 class="section-title mb-2">Login</h3>
+      <p class="mb-4">Open your dashboard and see your saved screening history.</p>
+      <a class="btn btn-primary" href="/login">Sign In</a>
     </div>
   </div>
   <div class="col-12 col-lg-4">
     <div class="section-card p-4 h-100">
-      <h3 class="section-title">Modeling</h3>
-      <p class="mb-0">Separate binary classifiers are trained for T21 and T18 using Logistic Regression, Random Forest, SVM, and XGBoost.</p>
+      <h3 class="section-title mb-2">Create account</h3>
+      <p class="mb-4">Make a new profile to keep all screenings together.</p>
+      <a class="btn btn-outline-primary" href="/signup">Create Account</a>
     </div>
   </div>
   <div class="col-12 col-lg-4">
     <div class="section-card p-4 h-100">
-      <h3 class="section-title">Research output</h3>
-      <p class="mb-0">Actual metrics, charts, explainability summaries, and PDF reporting are generated from the trained synthetic dataset.</p>
+      <h3 class="section-title mb-2">Disclaimer</h3>
+      <p class="mb-0">{{ disclaimer }}</p>
     </div>
   </div>
 </section>

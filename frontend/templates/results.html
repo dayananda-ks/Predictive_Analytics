@@ -1,17 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-  <div>
-    <h1 class="h2 page-heading mb-1">Results</h1>
-    <p class="mb-0">Model-estimated screening risk and prototype risk categories.</p>
+<section class="results-shell animate-fade-up">
+  <div class="section-card p-4 p-lg-5 mb-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-start align-items-lg-center">
+      <div>
+        <span class="badge pill-prototype rounded-pill mb-2">Prediction complete</span>
+        <h1 class="page-heading mb-2">Your result is ready</h1>
+        <p class="mb-0">The percentages below show the model-estimated chances for T21 and T18.</p>
+      </div>
+      <button class="btn btn-outline-primary btn-lg" id="download-report">Download PDF Report</button>
+    </div>
   </div>
-  <button class="btn btn-outline-primary" id="download-report">Download PDF Report</button>
-</div>
 
-<div id="results-container"></div>
+  <div id="results-container"></div>
 
-<div class="section-card p-4 mt-4">
-  <h2 class="h5">Disclaimer</h2>
-  <p class="mb-0">{{ disclaimer }}</p>
-</div>
+  <div class="section-card p-4 mt-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-start align-items-lg-center">
+      <div>
+        <h2 class="section-title mb-2">Next step</h2>
+        <p class="mb-0">This result is already stored in your history for later review.</p>
+      </div>
+      <div class="screening-note">
+        <div class="fw-semibold">Use with care</div>
+        <div class="small-muted">Discuss the result with a qualified clinician.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card p-4 mt-4">
+    <h2 class="h5 mb-2">Disclaimer</h2>
+    <p class="mb-0">{{ disclaimer }}</p>
+  </div>
+</section>
 {% endblock %}
